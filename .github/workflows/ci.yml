@@ -1,4 +1,4 @@
-name: Maven CI & Docker Push
+name: Maven CI & Docker Push 
 
 on:
   push:
