@@ -7,7 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -33,10 +32,15 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     needs: build
-
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+
+      - name: Download WAR artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: maven-build
+          path: target
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -48,4 +52,4 @@ jobs:
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/maven-webapp:${{ github.sha }} .
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/maven-webapp:${{ github.sha }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/maven-webapp:${{ github.sha }}
